@@ -317,8 +317,9 @@ export const calcLpOut = (share, data) => {
         }
     }    
 
-    let token0InWallet = data.reserveA;
-    let token1InWallet = data.reserveB;
+
+    let token0InWallet = Number(data.reserveA);
+    let token1InWallet = Number(data.reserveB);
 
     let shares = share;
 
@@ -347,7 +348,7 @@ export const RemoveLp = async (tonConnectUI, pairAddress, address, value, balanc
     if (balance <= 0 || value == 0) return;
     const _amount = String((value / 100) * balance)
     const num = _amount.includes(".") ? Number(_amount.split(".")[0]) : Number(_amount)
-    burnJetton(tonConnectUI, pairAddress, address, num)
+    await burnJetton(tonConnectUI, pairAddress, address, num)
 }
 
 export const RemoveStuckAdmin = async (tonConnectUI, pairChild) => {

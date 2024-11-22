@@ -2,6 +2,7 @@ import { Address, beginCell, toNano } from '@ton/core';
 import { SampleJetton } from './Impulse-Finance_Jetton';
 import { JettonDefaultWallet } from './Impulse-Finance_JettonDefaultWallet';
 import { getTonClient } from './useTonClient';
+import { awaitTx, convertBocToHash } from '../components/trade/pools/helper';
 
 function getTonConnect(tonConnectUI) {
     return {
@@ -83,7 +84,9 @@ export const burnJetton = async (tonConnectUI, tokenRoot, address, amount) => {
         custom_payload: null,
     }
 
-    return await wallet?.send(sender, { value: toNano("0.2") }, message);
+    const result = await wallet?.send(sender, { value: toNano("0.2") }, message);
+    const harsh = await convertBocToHash(result.boc)
+    return await awaitTx(harsh)
 
 }
 
