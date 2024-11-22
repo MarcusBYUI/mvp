@@ -1,0 +1,13 @@
+{
+    "projects": [{
+        "name": "Impulse-Finance",
+        "path": "./sources/factory.tact",
+        "output": "./sources/output",
+        "options": {
+            "debug": true,
+            "experimental": {
+                "inline": true
+            }
+        }
+    }]
+}
