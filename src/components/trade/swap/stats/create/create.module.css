@@ -1,0 +1,321 @@
+.border {
+    background: linear-gradient(180deg, #29418B 0%, #252346 100%);
+    border-radius: 20px;
+    padding: 1px;
+}
+
+.bg {
+    background: #10183F;
+    border-radius: 20px;
+}
+
+.create {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.create h2 {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 26px;
+    /* identical to box height, or 74% */
+    color: #FFFFFF;
+    mix-blend-mode: normal;
+    margin: 55px 0 30px 0;
+}
+
+.create h3 {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 26px;
+    /* identical to box height, or 74% */
+    color: #FFFFFF;
+    mix-blend-mode: normal;
+    margin: 60px 0 0 0 !important;
+}
+
+.create form {
+    background: linear-gradient(142.21deg, rgba(27, 51, 81, 0.3) 19.63%, rgba(155, 97, 149, 0.3) 83.01%);
+    box-shadow: 0px 40px 40px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    /* Note: backdrop-filter has minimal browser support */
+    padding: 15px 25px;
+    border-radius: 20px;
+}
+
+.create form>* {
+    margin: 30px 0;
+}
+
+
+/* ///
+//
+//
+//
+/
+input
+/
+//
+//
+//
+/// */
+
+.input {
+    position: relative;
+    flex-basis: 100%;
+}
+
+.input>div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input>div button {
+    background: linear-gradient(142.21deg, rgba(27, 51, 81, 0.3) 19.63%, rgba(155, 97, 149, 0.3) 83.01%);
+    border-radius: 7px;
+    padding: 7px 25px;
+    cursor: pointer;
+    ;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 23px;
+    border: none;
+    color: #FFFFFF;
+}
+
+.input p {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 12px;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.input span {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 15px;
+    color: #B5B3BC;
+    cursor: pointer;
+}
+
+.create li {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 19px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.input textarea {
+    width: -webkit-fill-available;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 12px;
+    /* identical to box height, or 75% */
+    color: #FFFFFF;
+    padding: 15px;
+    border: 1px solid #F2F0FF;
+    border-radius: 5px;
+    background-color: transparent;
+    margin: 5px 0;
+}
+
+.input input {
+    display: block;
+    margin: 5px 0;
+    width: -webkit-fill-available;
+    border: 1px solid #F2F0FF;
+    border-radius: 5px;
+    background-color: transparent;
+    height: 33px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 12px;
+    /* identical to box height, or 75% */
+    color: #FFFFFF;
+    padding-left: 15px;
+}
+
+.div {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 30px;
+    position: relative;
+}
+
+.radio div {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin: 10px 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.radio label {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    cursor: pointer;
+}
+
+.radio input {
+    margin: 0;
+}
+
+.border1 {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.433075) 24.29%, rgba(0, 0, 0, 0.3) 76.35%);
+    border-radius: 5px;
+    padding: 1px;
+    width: max-content;
+}
+
+.bg1 {
+    background: #10183F;
+    border-radius: 5px;
+}
+
+.submit {
+    background: linear-gradient(180deg, rgba(85, 173, 255, 0.38) 0%, rgba(255, 255, 255, 0) 104.98%, rgba(255, 255, 255, 0.38) 106.83%), linear-gradient(180deg, rgba(255, 255, 255, 0) -19.57%, #FFFFFF 98.8%, rgba(255, 255, 255, 0.222222) 130.43%);
+    border-radius: 5px;
+    padding: 7px 32px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 23px;
+    border: none;
+    color: #282850;
+    width: 160px;
+}
+
+.submit:hover {
+    background: linear-gradient(120deg, rgba(85, 173, 255, 0.38) 0%, rgba(255, 255, 255, 0) 184.98%, rgba(255, 255, 255, 0.38) 106.83%), linear-gradient(108deg, rgba(255, 255, 255, 0) -19.57%, #FFFFFF 98.8%, rgba(255, 255, 255, 0.222222) 130.43%);
+}
+
+.vest {
+    margin: 20px auto;
+}
+
+.vest>:first-child {
+    border-radius: 20px;
+    background: linear-gradient(142deg, rgba(27, 51, 81, 0.30) 19.63%, rgba(106, 41, 112, 0.30) 83.01%);
+    padding: 20px;
+    gap: 5px;
+}
+
+.vest div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.vest>:first-child div {
+    margin: 0;
+}
+
+.vest div p {
+    margin: 0;
+    color: #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 26px;
+    /* 185.714% */
+}
+
+.vest span {
+    color: #FFF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 26px;
+    /* 216.667% */
+}
+
+.vesting h2 {
+    color: #FFF;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+    text-align: center;
+    margin: 60px 0;
+    /* 104% */
+}
+
+.vesting button {
+    width: 110px;
+    height: 40px;
+    cursor: pointer;
+    ;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 23px;
+    border: none;
+    color: #FFFFFF;
+    border-radius: 5px;
+    background: linear-gradient(142deg, rgba(27, 51, 81, 0.30) 19.63%, rgba(106, 41, 112, 0.30) 83.01%);
+    justify-self: flex-end;
+}
+
+.vesting button:hover {
+    background: linear-gradient(42deg, rgba(27, 51, 81, 0.30) 109.63%, rgba(106, 41, 112, 0.30) 83.01%);
+}
+
+.vest img {
+    width: 15px !important;
+    cursor: pointer;
+    margin: 0 0 0 auto;
+}
+
+.adder {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.adder button {
+    width: 60px;
+    height: 30px;
+    cursor: pointer;
+    ;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 23px;
+    border: none;
+    color: linear-gradient(142deg, rgba(27, 51, 81, 0.30) 19.63%, rgba(106, 41, 112, 0.30) 83.01%);
+    border-radius: 5px;
+    background: white;
+}
+
+@media only screen and (min-width: 550px) {
+    .input {
+        flex-basis: auto;
+    }
+    .create h2 {
+        font-size: 30px;
+    }
+    .create h3 {
+        margin-top: 70px !important;
+        font-size: 25px !important;
+    }
+    .div {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    .create form {
+        padding: 25px 45px;
+    }
+}

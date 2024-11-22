@@ -1,0 +1,332 @@
+.heroborder {
+    background: linear-gradient(180deg, #29418B 0%, #252346 100%);
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    padding: 1px;
+}
+
+.herobg {
+    border-radius: 20px;
+    background: #10183F;
+}
+
+.kycButtons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 0 27px;
+}
+
+.kycButtons button {
+    width: 102px;
+    height: 36px;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 23px;
+    border: 1px solid #0098ea;
+    color: #FFFFFF;
+    border-radius: 10px;
+    background: #12a8ff50;
+    justify-self: flex-end;
+    display: block;
+    transition: all 300ms ease-in-out;
+}
+
+.kycButtons button:hover {
+    background: #0098ea;
+}
+
+.hero {
+    border-radius: 20px;
+    background: linear-gradient(114deg, rgba(27, 51, 81, 0.30) 15.80%, rgba(106, 41, 112, 0.30) 92.73%);
+    padding: 27px;
+}
+
+.hero h1 {
+    color: #FFF;
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.hero p {
+    color: #FFF;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.none {
+    display: none;
+}
+
+.list {
+    min-height: 700px;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.header h2 {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 26px;
+    /* identical to box height, or 74% */
+    color: #FFFFFF;
+    mix-blend-mode: normal;
+}
+
+.listnav {
+    margin: 30px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 30px;
+}
+
+.listnav> :first-child {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.salestate {
+    border-radius: 20px;
+    background: #23264D;
+    display: flex;
+    align-items: center;
+}
+
+.salestate button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 15px 26px;
+    color: #FFF;
+    transition: all 300ms ease-in-out;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.active {
+    background-color: #FFF !important;
+    color: #1B3351 !important;
+}
+
+.participated {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.participated p {
+    color: #FFF;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    background: #23264D;
+    border-radius: 20px;
+    transition: all 300ms ease-in-out;
+}
+
+.toggle button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 11px 12px;
+    transition: all 300ms ease-in-out;
+    border-radius: 20px;
+}
+
+.toggle> :first-child {
+    background-color: #fff;
+}
+
+.activate {
+    background-color: #676A93 !important;
+}
+
+.activate> :first-child {
+    background-color: transparent !important;
+}
+
+.activate> :last-child {
+    background-color: #fff !important;
+}
+
+.filter {
+    position: relative;
+    user-select: none;
+    z-index: 2;
+    margin: 0 0 0 auto;
+}
+
+.filter>span {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    /* identical to box height, or 167% */
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.dropHeader {
+    border-radius: 15px;
+    background: #23264D;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 20px;
+    width: 140px;
+    height: 46px;
+    cursor: pointer;
+}
+
+.dropHeader p {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 23px;
+    color: #FFFFFF;
+    mix-blend-mode: normal;
+    margin: 0;
+}
+
+.dropHeader img {
+    width: 10px;
+    transition: all ease-in-out 300ms;
+}
+
+.roll {
+    transform: rotate(180deg);
+}
+
+.dropDown {
+    position: absolute;
+    border-radius: 15px;
+    background: #23264D;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    padding: 10px 15px;
+    transition: all ease-in-out 300ms;
+    right: -200%;
+    top: 75px;
+    opacity: 1;
+}
+
+.show {
+    right: 0 !important;
+    opacity: 1 !important;
+    left: 0;
+}
+
+.dropDown li {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #ffffff40;
+    margin: 10px 0;
+    cursor: pointer;
+    list-style: none;
+    padding-left: 10px;
+}
+
+.dropDown li:hover {
+    color: #fff !important;
+}
+
+.notfound {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 26px;
+    /* identical to box height, or 104% */
+    text-align: center;
+    color: #FFFFFF;
+    min-height: 200px;
+}
+
+.listContainer {
+    margin: 50px 0;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(290px, 330px));
+    justify-content: center;
+    gap: 40px;
+}
+
+.paginationContainer {
+    margin: 25px 0;
+    padding-bottom: 15px;
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.create {
+    width: 132px;
+    height: 46px;
+    cursor: pointer;
+    ;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 23px;
+    border: none;
+    color: #FFFFFF;
+    border-radius: 10px;
+    background: #23264D;
+    justify-self: flex-end;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.create:hover {
+    background: #292b4e;
+}
+
+.kycButtonsP {
+    padding: 0 27px;
+}
+
+@media only screen and (min-width: 550px) {
+    .kycButtons {
+        padding: 0 35px;
+    }
+    .kycButtonsP {
+        padding: 0 35px;
+    }
+    .hero {
+        padding: 35px;
+    }
+    .hero h1 {
+        font-size: 30px;
+    }
+    .hero p {
+        font-size: 14px;
+        margin: 10px 0;
+    }
+    .listnav {
+        margin: 60px 0;
+        grid-template-columns: 1fr 1fr;
+    }
+    .notfound {
+        font-size: 20px;
+    }
+    .create {
+        width: 168px;
+        height: 55px;
+        font-size: 14px;
+    }
+}

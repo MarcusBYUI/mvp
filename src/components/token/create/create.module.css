@@ -1,0 +1,113 @@
+.create {
+    width: 98%;
+    max-width: 650px;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+.create> :first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.edit {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 15px 0;
+}
+
+.edit> :last-child {
+    fill: #12AAFF;
+    transform: rotateY(180deg);
+}
+
+.edit span {
+    color: #12AAFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.84px;
+    /* 141.714% */
+}
+
+.create h3 {
+    color: #FFF;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 19.84px;
+    /* 79.36% */
+    letter-spacing: 0.75px;
+    margin-bottom: 0;
+}
+
+.create p {
+    color: #12AAFF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.84px;
+    /* 141.714% */
+}
+
+.create form {
+    margin-top: 45px;
+}
+
+.create form div {
+    margin-bottom: 20px;
+}
+
+.create form input {
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+    background-color: transparent;
+    display: block;
+    width: -webkit-fill-available;
+    padding: 10px 5px;
+    color: rgba(255, 255, 255, 1);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 12px;
+}
+
+.create form input::placeholder {
+    color: rgba(255, 255, 255, 0.40);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 12px;
+    /* 85.714% */
+}
+
+.create form span {
+    color: rgba(255, 255, 255, 0.40);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 12px;
+    /* 120% */
+}
+
+.create form>button {
+    display: block;
+    border-radius: 10px;
+    background: #12AAFF;
+    color: #fff;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    border: none;
+    cursor: pointer;
+    padding: 12px 42px;
+    margin: 14px 0;
+    margin-top: 40px;
+    transition: all .3s ease-in-out;
+}
+
+.create form>button:hover {
+    background: #0d7dbe;
+}

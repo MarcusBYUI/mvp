@@ -1,0 +1,50 @@
+.swap {
+    width: -webkit-fill-available;
+    max-width: 450px;
+    margin: 100px auto;
+}
+
+.divider {
+    margin: 25px 0;
+    position: relative;
+}
+
+.divider hr {
+    background: #1A1C2B;
+    height: 1px;
+    border: none;
+}
+
+.divider img {
+    position: absolute;
+    border-radius: 20px;
+    padding: 11px;
+    background: #010314;
+    border: 1px solid #1A1C2B;
+    width: 18px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: -19px;
+    cursor: pointer;
+}
+
+.swap>button {
+    display: block;
+    border-radius: 10px;
+    background: #12AAFF;
+    color: #fff;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    border: none;
+    cursor: pointer;
+    padding: 14px 22px;
+    width: -webkit-fill-available;
+    margin: 14px 0;
+    transition: all .3s ease-in-out;
+}
+
+.swap>button:hover {
+    background: #0d7dbe;
+}
