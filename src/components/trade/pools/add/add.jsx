@@ -30,18 +30,25 @@ const Add = () => {
     const [tokenAdded, setTokenAdded] = useState(false)
 
     useEffect(() => {
-        if (tokenIn?.balance != tokens[0]?.balance) {
-            if (tokenIn && tokenIn?.address != tokens[0]?.address) return;
-            setTokenIn(tokens[0])
-        }
+        if (!tokens) return;
 
-        if (tokenOut?.balance != tokens[1]?.balance) {
-            if (tokenOut && tokenOut?.address != tokens[1]?.address) return;
+            if (tokenIn) {
+                const currentToken = {...tokens.find((token)=> token.address == tokenIn.address)}
+                currentToken.amount = tokenIn.amount
+                setTokenIn(currentToken)
+            }else{
+                setTokenIn(tokens[0])
+            }
 
-            setTokenOut(tokens[1])
-        }
+            if (tokenOut) {
+                const currentToken = {...tokens.find((token)=> token.address == tokenOut.address)}
+                currentToken.amount = tokenOut.amount
+                setTokenOut(currentToken)
+            }else{
+                setTokenOut(tokens[1])
+            }
 
-    }, [tokens, tokenIn, tokenOut, address])
+    }, [tokens, tokenIn?.address, tokenOut?.address, address])
 
     useEffect(() => {
         let abortController;
@@ -69,8 +76,13 @@ const Add = () => {
         //pool creation
         if (!pairInfo.created) {
             dispatch(notificationActions.setNotify(true));
-            await handleCreatePair(tonConnectUI, pairInfo.creator)
-            dispatch(notificationActions.setNotify(false));
+            try {
+                await handleCreatePair(tonConnectUI, pairInfo.creator)
+                dispatch(notificationActions.setNotify(false));
+            } catch (error) {
+                dispatch(notificationActions.setNotify(false));
+
+            }
         }
 
     }
@@ -79,8 +91,13 @@ const Add = () => {
     const handleJoin = async () => {
         if (pairInfo?.created && !pairInfo?.child) {
             dispatch(notificationActions.setNotify(true));
-            await handleJoinPair(tonConnectUI, pairInfo)
-            dispatch(notificationActions.setNotify(false));
+            try {
+                await handleJoinPair(tonConnectUI, pairInfo)
+                dispatch(notificationActions.setNotify(false));
+            } catch (error) {
+                dispatch(notificationActions.setNotify(false));
+
+            }
         }
 
     }

@@ -7,28 +7,34 @@ import Details from './details/details';
 import { useEffect } from "react";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { tokenList } from "./helper";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { swapActions } from "../../../store/swap/swap";
 
 const Pools = () => {
     //get token list here and refresh
     const address = useTonAddress()
     const dispatch = useDispatch()
-    const { message } = useSelector(
-        (state) => state.notification
-    );
 
     useEffect(() => {
         let interval;
-        (async function () {
-            setInterval(async () => {
-                const res = await tokenList(address)
-                dispatch(swapActions.setTokens(res))
-            }, 9000);
-
-        })();
+    
+        // Define the asynchronous function
+        const fetchTokens = async () => {
+            const res = await tokenList(address);
+            dispatch(swapActions.setTokens(res));
+        };
+    
+        // Immediately call the function once
+        fetchTokens();
+    
+        // Set the interval to call the function repeatedly
+        interval = setInterval(() => {
+            fetchTokens();
+        }, 9000);
+    
+        // Cleanup interval when the component unmounts or dependencies change
         return () => clearInterval(interval);
-    }, [address, dispatch, message]);
+    }, [address, dispatch]);
 
     return (
         <HelmetProvider>

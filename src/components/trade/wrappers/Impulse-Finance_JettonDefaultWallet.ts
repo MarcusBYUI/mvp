@@ -584,20 +584,11 @@ function storeTupleTokenTransfer(source: TokenTransfer) {
     builder.writeAddress(source.response_destination);
     builder.writeCell(source.custom_payload);
     builder.writeNumber(source.forward_ton_amount);
-    builder.writeSlice(source.forward_payload.asCell());
+    builder.writeSlice(source.forward_payload);
     return builder.build();
 }
 
-function dictValueParserTokenTransfer(): DictionaryValue<TokenTransfer> {
-    return {
-        serialize: (src, builder) => {
-            builder.storeRef(beginCell().store(storeTokenTransfer(src)).endCell());
-        },
-        parse: (src) => {
-            return loadTokenTransfer(src.loadRef().beginParse());
-        }
-    }
-}
+
 
 export type TokenTransferInternal = {
     $$type: 'TokenTransferInternal';

@@ -43,18 +43,25 @@ const Swap = () => {
     }, [tokenIn, tokenOut?.address])
 
     useEffect(() => {
+        if (!tokens) return;
 
-            if (tokenIn?.balance != tokens[0]?.balance) {
-                if (tokenIn && tokenIn?.address != tokens[0]?.address) return;
+            if (tokenIn) {
+                const currentToken = {...tokens.find((token)=> token.address == tokenIn.address)}
+                currentToken.amount = tokenIn.amount
+                setTokenIn(currentToken)
+            }else{
                 setTokenIn(tokens[0])
             }
 
-            if (tokenOut?.balance != tokens[1]?.balance) {
-                if (tokenOut && tokenOut?.address != tokens[1]?.address) return;
+            if (tokenOut) {
+                const currentToken = {...tokens.find((token)=> token.address == tokenOut.address)}
+                currentToken.amount = tokenOut.amount
+                setTokenOut(currentToken)
+            }else{
                 setTokenOut(tokens[1])
             }
 
-    }, [tokens, tokenIn, tokenOut, address])
+    }, [tokens, tokenIn?.address, tokenOut?.address, address])
 
     const handleSwap = async()=>{
         //await sendToken(tonConnectUI, "UQCOOO4PZC_mZ5CiCEJmBWTWdLx0mlq-D2yd_xjdUgktNcyU", address)

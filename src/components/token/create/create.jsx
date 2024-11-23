@@ -15,6 +15,7 @@ const Create = () => {
 
   const handleSubmission = async (e)=>{
     e.preventDefault()
+    if(address.length == 0) return;
     const form = new FormData(e.target)
 
     try {
@@ -22,10 +23,10 @@ const Create = () => {
       const newAddress = await createToken(tonConnectUI, form, address)
       
       setTimeout(() => {
-        navigate("/edit" + newAddress)
+        navigate("/token/edit/" + newAddress)
+        dispatch(notificationActions.setNotify(false))
       }, 5000);
       
-      dispatch(notificationActions.setNotify(false))
     } catch (error) {
       dispatch(notificationActions.setNotify(false))
       console.log(error);
@@ -79,7 +80,7 @@ const Create = () => {
           <input type="text" name="collector" placeholder="Tax Collector Address" required />
           <span>Address to send all token taxes to</span>
         </div>
-        <button>Deploy</button>
+        <button>{address.length == 0 ? "Connect Wallet" : "Deploy"}</button>
       </form>
     </div>
   );

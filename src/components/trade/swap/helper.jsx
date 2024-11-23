@@ -5,15 +5,13 @@ import { getTonClient } from '../../../hooks/useTonClient';
 import { Router } from '../wrappers/Impulse-Finance_Router';
 import { convertBocToHash, awaitTx } from '../pools/helper';
 import { SampleJetton } from '../../../hooks/Impulse-Finance_Jetton';
-import { storeTokenTransfer} from '../wrappers/Impulse-Finance_JettonDefaultWallet';
-
+import { storeTokenTransfer } from '../wrappers/Impulse-Finance_JettonDefaultWallet';
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 const client = getTonClient()
-
 function getTonConnect(tonConnectUI) {
     return {
         sender: {
             send: async (args) => {
-
                 return await tonConnectUI.sendTransaction({
                     messages: [
                         {
@@ -88,7 +86,7 @@ export const swapTon = async (tonConnectUI, tokenIn, swapInfo, receiver) => {
     const _amount = String(tokenIn.amount * (10 ** tokenIn.decimals))
     const num = _amount.includes(".") ? Number(_amount.split(".")[0]) : Number(_amount)
 
-    
+
     const struct = {
         tokenRoot: Address.parse(tokenIn.address),
         amountIn: num,
@@ -102,16 +100,17 @@ export const swapTon = async (tonConnectUI, tokenIn, swapInfo, receiver) => {
 
 
     const payload = buildTonSwapPayload(struct);
-    
-    
+
+
     const message = {
         $$type: 'TonSwap',
         forward_payload: payload,
     }
 
-    const result = await routerContract?.send(sender, { value: toNano((0.05 * swapInfo.length) + 0.25 + tokenIn.amount) }, message);
-    const harsh = await convertBocToHash(result.boc)
-    return await awaitTx(harsh)
+    await routerContract.send(sender, { value: toNano((0.08 * swapInfo.length) + 0.12 + tokenIn.amount) }, message);
+    await sleep(25000)
+
+    return
 
 }
 
@@ -132,19 +131,19 @@ export const swapToken = async (tonConnectUI, tokenIn, swapInfo, receiver) => {
     }
 
     const payload = buildTonSwapPayload(struct)
-    
+
     const message = {
         $$type: 'TokenTransfer',
         query_id: 0,
         amount: num,
         destination: Address.parse(router),
-        response_destination: Address.parse(router),
+        response_destination: Address.parse(receiver),
         custom_payload: null,
-        forward_ton_amount: toNano((0.05 * swapInfo.length) + 0.15).toString(),
+        forward_ton_amount: toNano((0.08 * swapInfo.length) + 0.12).toString(),
         forward_payload: beginCell().storeSlice(payload).endCell()
     }
     const body = beginCell().store(storeTokenTransfer(message)).endCell()
-    
+
     const rootContract = new SampleJetton(
         Address.parse(tokenIn.address)
     );
@@ -157,7 +156,7 @@ export const swapToken = async (tonConnectUI, tokenIn, swapInfo, receiver) => {
         messages: [
             {
                 address: walletAddress.toString(),
-                amount: toNano((0.05 * swapInfo.length) + 0.35).toString(),
+                amount: toNano((0.08 * swapInfo.length) + 0.24).toString(),
                 payload: body.toBoc().toString("base64"),
             }
         ],

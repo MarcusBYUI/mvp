@@ -795,59 +795,65 @@ function dictValueParserTokenTransferInternal(): DictionaryValue<TokenTransferIn
     }
 }
 
-export type Forwarder = {
-    $$type: 'Forwarder';
+export type JettonInfo = {
+    $$type: 'JettonInfo';
+    mint: boolean;
+    whitelist: Dictionary<Address, boolean>;
     tax: bigint;
     collector: Address;
-    payload: Slice;
 }
 
-export function storeForwarder(src: Forwarder) {
+export function storeJettonInfo(src: JettonInfo) {
     return (builder: Builder) => {
         let b_0 = builder;
+        b_0.storeBit(src.mint);
+        b_0.storeDict(src.whitelist, Dictionary.Keys.Address(), Dictionary.Values.Bool());
         b_0.storeInt(src.tax, 257);
         b_0.storeAddress(src.collector);
-        b_0.storeBuilder(src.payload.asBuilder());
     };
 }
 
-export function loadForwarder(slice: Slice) {
+export function loadJettonInfo(slice: Slice) {
     let sc_0 = slice;
+    let _mint = sc_0.loadBit();
+    let _whitelist = Dictionary.load(Dictionary.Keys.Address(), Dictionary.Values.Bool(), sc_0);
     let _tax = sc_0.loadIntBig(257);
     let _collector = sc_0.loadAddress();
-    let _payload = sc_0;
-    return { $$type: 'Forwarder' as const, tax: _tax, collector: _collector, payload: _payload };
+    return { $$type: 'JettonInfo' as const, mint: _mint, whitelist: _whitelist, tax: _tax, collector: _collector };
 }
 
-function loadTupleForwarder(source: TupleReader) {
+function loadTupleJettonInfo(source: TupleReader) {
+    let _mint = source.readBoolean();
+    let _whitelist = Dictionary.loadDirect(Dictionary.Keys.Address(), Dictionary.Values.Bool(), source.readCellOpt());
     let _tax = source.readBigNumber();
     let _collector = source.readAddress();
-    let _payload = source.readCell().asSlice();
-    return { $$type: 'Forwarder' as const, tax: _tax, collector: _collector, payload: _payload };
+    return { $$type: 'JettonInfo' as const, mint: _mint, whitelist: _whitelist, tax: _tax, collector: _collector };
 }
 
-function loadGetterTupleForwarder(source: TupleReader) {
+function loadGetterTupleJettonInfo(source: TupleReader) {
+    let _mint = source.readBoolean();
+    let _whitelist = Dictionary.loadDirect(Dictionary.Keys.Address(), Dictionary.Values.Bool(), source.readCellOpt());
     let _tax = source.readBigNumber();
     let _collector = source.readAddress();
-    let _payload = source.readCell().asSlice();
-    return { $$type: 'Forwarder' as const, tax: _tax, collector: _collector, payload: _payload };
+    return { $$type: 'JettonInfo' as const, mint: _mint, whitelist: _whitelist, tax: _tax, collector: _collector };
 }
 
-function storeTupleForwarder(source: Forwarder) {
+function storeTupleJettonInfo(source: JettonInfo) {
     let builder = new TupleBuilder();
+    builder.writeBoolean(source.mint);
+    builder.writeCell(source.whitelist.size > 0 ? beginCell().storeDictDirect(source.whitelist, Dictionary.Keys.Address(), Dictionary.Values.Bool()).endCell() : null);
     builder.writeNumber(source.tax);
     builder.writeAddress(source.collector);
-    builder.writeSlice(source.payload.asCell());
     return builder.build();
 }
 
-function dictValueParserForwarder(): DictionaryValue<Forwarder> {
+function dictValueParserJettonInfo(): DictionaryValue<JettonInfo> {
     return {
         serialize: (src, builder) => {
-            builder.storeRef(beginCell().store(storeForwarder(src)).endCell());
+            builder.storeRef(beginCell().store(storeJettonInfo(src)).endCell());
         },
         parse: (src) => {
-            return loadForwarder(src.loadRef().beginParse());
+            return loadJettonInfo(src.loadRef().beginParse());
         }
     }
 }
@@ -1502,6 +1508,80 @@ function dictValueParserRemoveFromWhitelist(): DictionaryValue<RemoveFromWhiteli
     }
 }
 
+export type InitJetton = {
+    $$type: 'InitJetton';
+    collector: Address;
+    receiver: Address;
+    factory: Address;
+    tax: bigint;
+    amount: bigint;
+}
+
+export function storeInitJetton(src: InitJetton) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(3683621155, 32);
+        b_0.storeAddress(src.collector);
+        b_0.storeAddress(src.receiver);
+        b_0.storeAddress(src.factory);
+        let b_1 = new Builder();
+        b_1.storeInt(src.tax, 257);
+        b_1.storeInt(src.amount, 257);
+        b_0.storeRef(b_1.endCell());
+    };
+}
+
+export function loadInitJetton(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 3683621155) { throw Error('Invalid prefix'); }
+    let _collector = sc_0.loadAddress();
+    let _receiver = sc_0.loadAddress();
+    let _factory = sc_0.loadAddress();
+    let sc_1 = sc_0.loadRef().beginParse();
+    let _tax = sc_1.loadIntBig(257);
+    let _amount = sc_1.loadIntBig(257);
+    return { $$type: 'InitJetton' as const, collector: _collector, receiver: _receiver, factory: _factory, tax: _tax, amount: _amount };
+}
+
+function loadTupleInitJetton(source: TupleReader) {
+    let _collector = source.readAddress();
+    let _receiver = source.readAddress();
+    let _factory = source.readAddress();
+    let _tax = source.readBigNumber();
+    let _amount = source.readBigNumber();
+    return { $$type: 'InitJetton' as const, collector: _collector, receiver: _receiver, factory: _factory, tax: _tax, amount: _amount };
+}
+
+function loadGetterTupleInitJetton(source: TupleReader) {
+    let _collector = source.readAddress();
+    let _receiver = source.readAddress();
+    let _factory = source.readAddress();
+    let _tax = source.readBigNumber();
+    let _amount = source.readBigNumber();
+    return { $$type: 'InitJetton' as const, collector: _collector, receiver: _receiver, factory: _factory, tax: _tax, amount: _amount };
+}
+
+function storeTupleInitJetton(source: InitJetton) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.collector);
+    builder.writeAddress(source.receiver);
+    builder.writeAddress(source.factory);
+    builder.writeNumber(source.tax);
+    builder.writeNumber(source.amount);
+    return builder.build();
+}
+
+function dictValueParserInitJetton(): DictionaryValue<InitJetton> {
+    return {
+        serialize: (src, builder) => {
+            builder.storeRef(beginCell().store(storeInitJetton(src)).endCell());
+        },
+        parse: (src) => {
+            return loadInitJetton(src.loadRef().beginParse());
+        }
+    }
+}
+
 export type Mint = {
     $$type: 'Mint';
     amount: bigint;
@@ -1560,11 +1640,12 @@ export type DeflationaryJetton$Data = {
     total_supply: bigint;
     owner: Address;
     collector: Address;
+    factory: Address;
     content: Cell;
     mintable: boolean;
     fee: bigint;
     whitelist: Dictionary<Address, boolean>;
-    max_supply: bigint;
+    _initialized: boolean;
 }
 
 export function storeDeflationaryJetton$Data(src: DeflationaryJetton$Data) {
@@ -1573,12 +1654,13 @@ export function storeDeflationaryJetton$Data(src: DeflationaryJetton$Data) {
         b_0.storeCoins(src.total_supply);
         b_0.storeAddress(src.owner);
         b_0.storeAddress(src.collector);
+        b_0.storeAddress(src.factory);
         b_0.storeRef(src.content);
         b_0.storeBit(src.mintable);
-        b_0.storeInt(src.fee, 257);
-        b_0.storeDict(src.whitelist, Dictionary.Keys.Address(), Dictionary.Values.Bool());
         let b_1 = new Builder();
-        b_1.storeCoins(src.max_supply);
+        b_1.storeInt(src.fee, 257);
+        b_1.storeDict(src.whitelist, Dictionary.Keys.Address(), Dictionary.Values.Bool());
+        b_1.storeBit(src._initialized);
         b_0.storeRef(b_1.endCell());
     };
 }
@@ -1588,37 +1670,40 @@ export function loadDeflationaryJetton$Data(slice: Slice) {
     let _total_supply = sc_0.loadCoins();
     let _owner = sc_0.loadAddress();
     let _collector = sc_0.loadAddress();
+    let _factory = sc_0.loadAddress();
     let _content = sc_0.loadRef();
     let _mintable = sc_0.loadBit();
-    let _fee = sc_0.loadIntBig(257);
-    let _whitelist = Dictionary.load(Dictionary.Keys.Address(), Dictionary.Values.Bool(), sc_0);
     let sc_1 = sc_0.loadRef().beginParse();
-    let _max_supply = sc_1.loadCoins();
-    return { $$type: 'DeflationaryJetton$Data' as const, total_supply: _total_supply, owner: _owner, collector: _collector, content: _content, mintable: _mintable, fee: _fee, whitelist: _whitelist, max_supply: _max_supply };
+    let _fee = sc_1.loadIntBig(257);
+    let _whitelist = Dictionary.load(Dictionary.Keys.Address(), Dictionary.Values.Bool(), sc_1);
+    let __initialized = sc_1.loadBit();
+    return { $$type: 'DeflationaryJetton$Data' as const, total_supply: _total_supply, owner: _owner, collector: _collector, factory: _factory, content: _content, mintable: _mintable, fee: _fee, whitelist: _whitelist, _initialized: __initialized };
 }
 
 function loadTupleDeflationaryJetton$Data(source: TupleReader) {
     let _total_supply = source.readBigNumber();
     let _owner = source.readAddress();
     let _collector = source.readAddress();
+    let _factory = source.readAddress();
     let _content = source.readCell();
     let _mintable = source.readBoolean();
     let _fee = source.readBigNumber();
     let _whitelist = Dictionary.loadDirect(Dictionary.Keys.Address(), Dictionary.Values.Bool(), source.readCellOpt());
-    let _max_supply = source.readBigNumber();
-    return { $$type: 'DeflationaryJetton$Data' as const, total_supply: _total_supply, owner: _owner, collector: _collector, content: _content, mintable: _mintable, fee: _fee, whitelist: _whitelist, max_supply: _max_supply };
+    let __initialized = source.readBoolean();
+    return { $$type: 'DeflationaryJetton$Data' as const, total_supply: _total_supply, owner: _owner, collector: _collector, factory: _factory, content: _content, mintable: _mintable, fee: _fee, whitelist: _whitelist, _initialized: __initialized };
 }
 
 function loadGetterTupleDeflationaryJetton$Data(source: TupleReader) {
     let _total_supply = source.readBigNumber();
     let _owner = source.readAddress();
     let _collector = source.readAddress();
+    let _factory = source.readAddress();
     let _content = source.readCell();
     let _mintable = source.readBoolean();
     let _fee = source.readBigNumber();
     let _whitelist = Dictionary.loadDirect(Dictionary.Keys.Address(), Dictionary.Values.Bool(), source.readCellOpt());
-    let _max_supply = source.readBigNumber();
-    return { $$type: 'DeflationaryJetton$Data' as const, total_supply: _total_supply, owner: _owner, collector: _collector, content: _content, mintable: _mintable, fee: _fee, whitelist: _whitelist, max_supply: _max_supply };
+    let __initialized = source.readBoolean();
+    return { $$type: 'DeflationaryJetton$Data' as const, total_supply: _total_supply, owner: _owner, collector: _collector, factory: _factory, content: _content, mintable: _mintable, fee: _fee, whitelist: _whitelist, _initialized: __initialized };
 }
 
 function storeTupleDeflationaryJetton$Data(source: DeflationaryJetton$Data) {
@@ -1626,11 +1711,12 @@ function storeTupleDeflationaryJetton$Data(source: DeflationaryJetton$Data) {
     builder.writeNumber(source.total_supply);
     builder.writeAddress(source.owner);
     builder.writeAddress(source.collector);
+    builder.writeAddress(source.factory);
     builder.writeCell(source.content);
     builder.writeBoolean(source.mintable);
     builder.writeNumber(source.fee);
     builder.writeCell(source.whitelist.size > 0 ? beginCell().storeDictDirect(source.whitelist, Dictionary.Keys.Address(), Dictionary.Values.Bool()).endCell() : null);
-    builder.writeNumber(source.max_supply);
+    builder.writeBoolean(source._initialized);
     return builder.build();
 }
 
@@ -1660,8 +1746,8 @@ function initJettonDefaultWallet_init_args(src: JettonDefaultWallet_init_args) {
 }
 
 async function JettonDefaultWallet_init(master: Address, owner: Address) {
-    const __code = Cell.fromBase64('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');
-    const __system = Cell.fromBase64('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');
+    const __code = Cell.fromBase64('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');
+    const __system = Cell.fromBase64('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');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -1710,8 +1796,7 @@ const JettonDefaultWallet_errors: { [key: number]: { message: string } } = {
     3688: { message: `Not mintable` },
     4159: { message: `Invalid value!!` },
     4429: { message: `Invalid sender` },
-    6898: { message: `The total supply will be overlapping.` },
-    12241: { message: `Max supply exceeded` },
+    9438: { message: `Already Initialized` },
     14534: { message: `Not owner` },
     23273: { message: `Not Authorized` },
     42708: { message: `Invalid sender!` },
@@ -1732,7 +1817,7 @@ const JettonDefaultWallet_types: ABIType[] = [
     {"name":"TokenTransfer","header":260734629,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"custom_payload","type":{"kind":"simple","type":"cell","optional":true}},{"name":"forward_ton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
     {"name":"Info","header":755332654,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":false}},{"name":"custom_payload","type":{"kind":"simple","type":"cell","optional":true}},{"name":"forward_ton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
     {"name":"TokenTransferInternal","header":395134233,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"from","type":{"kind":"simple","type":"address","optional":false}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":true}},{"name":"forward_ton_amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
-    {"name":"Forwarder","header":null,"fields":[{"name":"tax","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"collector","type":{"kind":"simple","type":"address","optional":false}},{"name":"payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
+    {"name":"JettonInfo","header":null,"fields":[{"name":"mint","type":{"kind":"simple","type":"bool","optional":false}},{"name":"whitelist","type":{"kind":"dict","key":"address","value":"bool"}},{"name":"tax","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"collector","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"TokenNotification","header":1935855772,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"from","type":{"kind":"simple","type":"address","optional":false}},{"name":"forward_payload","type":{"kind":"simple","type":"slice","optional":false,"format":"remainder"}}]},
     {"name":"TokenBurn","header":1499400124,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"TokenBurnNotification","header":2078119902,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"response_destination","type":{"kind":"simple","type":"address","optional":true}}]},
@@ -1744,8 +1829,9 @@ const JettonDefaultWallet_types: ABIType[] = [
     {"name":"UpdateCollector","header":903700435,"fields":[{"name":"collector","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"AddToWhitelist","header":2741095715,"fields":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"RemoveFromWhitelist","header":840714333,"fields":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"InitJetton","header":3683621155,"fields":[{"name":"collector","type":{"kind":"simple","type":"address","optional":false}},{"name":"receiver","type":{"kind":"simple","type":"address","optional":false}},{"name":"factory","type":{"kind":"simple","type":"address","optional":false}},{"name":"tax","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"amount","type":{"kind":"simple","type":"int","optional":false,"format":257}}]},
     {"name":"Mint","header":4235234258,"fields":[{"name":"amount","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"receiver","type":{"kind":"simple","type":"address","optional":false}}]},
-    {"name":"DeflationaryJetton$Data","header":null,"fields":[{"name":"total_supply","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"collector","type":{"kind":"simple","type":"address","optional":false}},{"name":"content","type":{"kind":"simple","type":"cell","optional":false}},{"name":"mintable","type":{"kind":"simple","type":"bool","optional":false}},{"name":"fee","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"whitelist","type":{"kind":"dict","key":"address","value":"bool"}},{"name":"max_supply","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}}]},
+    {"name":"DeflationaryJetton$Data","header":null,"fields":[{"name":"total_supply","type":{"kind":"simple","type":"uint","optional":false,"format":"coins"}},{"name":"owner","type":{"kind":"simple","type":"address","optional":false}},{"name":"collector","type":{"kind":"simple","type":"address","optional":false}},{"name":"factory","type":{"kind":"simple","type":"address","optional":false}},{"name":"content","type":{"kind":"simple","type":"cell","optional":false}},{"name":"mintable","type":{"kind":"simple","type":"bool","optional":false}},{"name":"fee","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"whitelist","type":{"kind":"dict","key":"address","value":"bool"}},{"name":"_initialized","type":{"kind":"simple","type":"bool","optional":false}}]},
 ]
 
 const JettonDefaultWallet_getters: ABIGetter[] = [

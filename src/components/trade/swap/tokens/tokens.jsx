@@ -78,7 +78,7 @@ const Tokens = ({ callback, animate, closePop }) => {
                     <span onClick={() => setFavourite(true)} className={favourite ? styles.active : ""}>Favourites</span>
                 </div>
                 <div ref={scrollableDivRef} className={styles.items}>
-                    {filter.length == 0 ? <p className={styles.notfound}>Asset not found</p> : filter.map((item, index) => {
+                    {filter?.length == 0 ? <p className={styles.notfound}>Asset not found</p> : filter?.map((item, index) => {
                         return <div style={{ opacity: token.address == item.address || other.address == item.address ? 0.2 : 1 }} onClick={token.address == item.address || other.address == item.address ? () => { } : () => { setToken(item); closePop() }} key={index} className={styles.item}>
                             <img src={item.logo} alt={item.name} />
                             <div>

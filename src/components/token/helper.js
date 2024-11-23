@@ -7,6 +7,7 @@ import { awaitTx, convertBocToHash } from "../trade/pools/helper";
 import { Sha256 } from "@aws-crypto/sha256-js";
 import { Buffer } from 'buffer';
 import { notificationActions } from "../../store/notification/notification";
+import { factory } from "../trade/config";
 
 
 const client = getTonClient()
@@ -72,7 +73,7 @@ export const transferToken = async (tonConnectUI, receiver, sender, contract, am
             messages: [
                 {
                     address: walletAddress.toString(),
-                    amount: toNano(0.1).toString(),
+                    amount: toNano(0.12).toString(),
                     payload: body.toBoc().toString("base64"),
                 }
             ],
@@ -435,6 +436,7 @@ export const createToken = async (tonConnectUI, form, address) => {
                 $$type: 'InitJetton',
                 collector: Address.parse(form.get("collector")),
                 receiver: Address.parse(address),
+                factory: Address.parse(factory),
                 tax: form.get("tax"),
                 amount: form.get("supply") * (10 ** form.get("decimals"))
             })

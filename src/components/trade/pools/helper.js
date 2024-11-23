@@ -113,24 +113,16 @@ export const awaitTx = async (harsh) => {
 }
 
 export const handleCreatePair = async (tonConnectUI, body) => {
-    try {
         const result = await sendLoad(tonConnectUI, factory, body, "0.2")
         const harsh = await convertBocToHash(result.boc)
         return await awaitTx(harsh)
 
-    } catch (error) {
-        throw Error(error)
-    }
 }
 
 export const handleJoinPair = async (tonConnectUI, pairInfo) => {
-    try {
-        const result = await sendLoad(tonConnectUI, pairInfo.address, pairInfo.creator, "0.11")
+        const result = await sendLoad(tonConnectUI, pairInfo.address, pairInfo.creator, "0.05")
         const harsh = await convertBocToHash(result.boc)
         return await awaitTx(harsh)
-    } catch (error) {
-        throw Error(error)
-    }
 }
 
 export const handleDepositTokens = async (tonConnectUI, tokenIn, tokenOut, pairInfo, address) => {
@@ -160,7 +152,7 @@ export const handleDepositTokens = async (tonConnectUI, tokenIn, tokenOut, pairI
             query_id: 0,
             amount: Number((new BigNumber(tokenIn.amount).shift(Number(tokenIn.decimals))).toFixed()),
             destination: Address.parse(pairInfo.childAddress),
-            response_destination: Address.parse(pairInfo.childAddress),
+            response_destination: Address.parse(address),
             custom_payload: null,
             forward_ton_amount: toNano("0.01").toString(),
             forward_payload: beginCell().storeCoins(0).endCell()
@@ -168,7 +160,7 @@ export const handleDepositTokens = async (tonConnectUI, tokenIn, tokenOut, pairI
         const body = beginCell().store(storeTokenTransfer(message)).endCell()
         token1 = {
             receiver: walletAddress.toString(),
-            amount: toNano("0.15").toString(),
+            amount: toNano("0.13").toString(),
             body: body.toBoc().toString("base64")
         }
     }
@@ -188,7 +180,7 @@ export const handleDepositTokens = async (tonConnectUI, tokenIn, tokenOut, pairI
             query_id: 0,
             amount: Number((new BigNumber(tokenOut.amount).shift(Number(tokenOut.decimals))).toFixed()),
             destination: Address.parse(pairInfo.childAddress),
-            response_destination: Address.parse(pairInfo.childAddress),
+            response_destination: Address.parse(address),
             custom_payload: null,
             forward_ton_amount: toNano("0.01").toString(),
             forward_payload: beginCell().storeCoins(0).endCell()
@@ -196,7 +188,7 @@ export const handleDepositTokens = async (tonConnectUI, tokenIn, tokenOut, pairI
         const body = beginCell().store(storeTokenTransfer(message)).endCell()
         token2 = {
             receiver: walletAddress.toString(),
-            amount: toNano("0.15").toString(),
+            amount: toNano("0.13").toString(),
             body: body.toBoc().toString("base64")
         }
     }
@@ -227,7 +219,7 @@ export const handleAddLp = async (tonConnectUI, pairInfo) => {
         messages: [
             {
                 address: pairInfo.address,
-                amount: toNano(0.35).toString(),
+                amount: toNano(0.5).toString(),
                 payload: beginCell().storeUint(0, 32).storeStringTail("InitAddLiquidity").endCell().toBoc().toString("base64")
             }
         ],
@@ -297,7 +289,7 @@ export const RemoveStuckLp = async (tonConnectUI, pairChild) => {
         messages: [
             {
                 address: pairChild,
-                amount: toNano(0.22).toString(),
+                amount: toNano(0.32).toString(),
                 payload: beginCell().storeUint(0, 32).storeStringTail("RemoveTokens").endCell().toBoc().toString("base64")
             }
         ],
@@ -317,9 +309,8 @@ export const calcLpOut = (share, data) => {
         }
     }    
 
-
-    let token0InWallet = Number(data.reserveA);
-    let token1InWallet = Number(data.reserveB);
+    let token0InWallet = data.reserveA;
+    let token1InWallet = data.reserveB;
 
     let shares = share;
 

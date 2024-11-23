@@ -1,3 +1,3 @@
-export const factory = "EQBT6ihNhmA3FkNsBbL55ai4npbFD3WJnX758U6vq0sEM0f6"
-export const router = "EQD1j0xobQQhaolEJmMNnzi-ftKS6HMbdYWdw46d9N2c4ASx"
+export const factory = "EQBgtWhRkKXI6UDCevpcVXUl1IMmuedXkemUkdzI07VISeVa"
+export const router = "EQA0V66QRE0vRbb2aqg5uZD6vvymAUq2bd17jyN04zRQWNi1"
 export const TONADDRESS = "0:0000000000000000000000000000000000000000000000000000000000000000"

@@ -1,7 +1,5 @@
 import { useDispatch } from "react-redux";
-import { getImageUrl, numberToTwoDecimals } from "../../../../helpers/utils";
 import styles from "./confirmation.module.css"
-import { swapActions } from "../../../../store/swap/swap";
 import { swapTon, swapToken } from '../helper';
 import { TONADDRESS } from "../../config";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
@@ -22,6 +20,7 @@ const Confirmation = ({ swapInfo, tokenIn, tokenOut, animate, closePop }) => {
         if (swapInfo.length > 0) {
             try {
                 dispatch(notificationActions.setNotify(true))
+                
                 if (tokenIn.address == TONADDRESS) {
                     //send in TON
                     await swapTon(tonConnectUI, tokenIn, swapInfo, address)
