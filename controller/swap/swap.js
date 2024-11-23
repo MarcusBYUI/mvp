@@ -5,6 +5,7 @@ const {calcAmountOut, formatPathLoop} = require("./wrappers/helper")
 const { client } = require("../../utils");
 const { formatDirectPairResponse, fetchRoutePairs, determineTokenOrder, arrangeTokens, getAccountAndPairInfo, createNewPairInDb, updatePairStartTime, handleChildAccount, preparePairCreationBody, getMultiPairPath } = require("./wrappers/helper.js");
 require("./wrappers/listener")
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
 const getTokenList = async (req, res, next) => {
     const schema = Joi.object().keys({
@@ -32,6 +33,7 @@ const getTokenList = async (req, res, next) => {
                 // If jetton doesn't exist in the list, add it to the database
                 if (!addressList.includes(jettonData.address) && Number(jetton.balance) > 0 && !jettonData.name.includes("Impulse Swap")) {
                     const { bounceable: { b64url } } = await client.accounts.addressParse(jettonData.address);
+                    await sleep(1000)
 
 
                     await query(
