@@ -427,7 +427,7 @@ export const createToken = async (tonConnectUI, form, address) => {
 
 
 
-    let content = buildOnchainMetadata(jettonParams,);
+    let content = buildOnchainMetadata(jettonParams);
     let init = await DeflationaryJetton.init(Address.parse(address), content);
 
     let packed_msg = beginCell()
