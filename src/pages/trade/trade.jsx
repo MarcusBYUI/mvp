@@ -12,16 +12,25 @@ const Trade = () => {
 
   useEffect(() => {
     let interval;
-    (async function () {
-      interval = setInterval(async () => {
-        const res = await tokenList(address)
-        dispatch(swapActions.setTokens(res))
-      }, 9000);
 
+    // Define the asynchronous function
+    const fetchTokens = async () => {
+        const res = await tokenList(address);
+        dispatch(swapActions.setTokens(res));
+    };
 
-    })();
+    // Immediately call the function once
+    fetchTokens();
+
+    // Set the interval to call the function repeatedly
+    interval = setInterval(() => {
+        fetchTokens();
+    }, 9000);
+
+    // Cleanup interval when the component unmounts or dependencies change
     return () => clearInterval(interval);
-  }, [address, dispatch]);
+}, [address, dispatch]);
+
   return (
     <>
       <Swap />
