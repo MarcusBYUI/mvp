@@ -30,7 +30,8 @@ const whitelist = [
     "http://localhost:5173",
     "https://localhost:5173",
     "http://192.168.1.41:5173",
-    undefined
+    "https://impulsefinance.xyz",
+    "https://www.impulsefinance.xyz"
 ];
 const corsOptions = {
     origin: function(origin, callback) {
