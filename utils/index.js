@@ -12,7 +12,7 @@ const testnet = {
 const { TonClient } = require("@ton/ton");
 
 const httpClient = new HttpClient({
-    baseUrl: testnet.tonapi,
+    baseUrl: mainnet.tonapi,
     baseApiParams: {
         headers: {
             Authorization: `Bearer ${process.env.TONTOKEN}`,
@@ -26,8 +26,8 @@ const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 const client = new Api(httpClient);
 
 const contractClient = new TonClient({
-    endpoint: testnet.toncenter,
-    apiKey: testnet.toncenterKey
+    endpoint: mainnet.toncenter,
+    apiKey: mainnet.toncenterKey
 })
 
 
