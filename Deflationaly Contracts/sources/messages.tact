@@ -111,6 +111,7 @@ message RemoveFromWhitelist{
 message InitJetton{
     collector: Address;
     receiver: Address;
+    factory: Address;
     tax: Int;
     amount: Int;
 }

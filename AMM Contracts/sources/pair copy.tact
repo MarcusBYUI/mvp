@@ -163,7 +163,6 @@ contract Pair with Jetton {
 
     //swap
     receive (msg: Swap) {
-
         let swapInit: SwapInit = SwapInit{
             rootIn: self.token1,
             rootOut: self.token0,
@@ -172,7 +171,7 @@ contract Pair with Jetton {
             reserveIn: self.reserve1, 
             reserveOut: self.reserve0
         };
-
+      
         if (msg.tokenRoot == self.token0){
             swapInit = SwapInit{
                 rootIn: self.token0, 
@@ -182,27 +181,49 @@ contract Pair with Jetton {
                 reserveIn: self.reserve0,
                 reserveOut: self.reserve1
             };
-        }else if(msg.tokenRoot != self.token1){
-            throw(1666);
         }
 
         let amountInWithFee: Int = msg.amount;
+
+        if (swapInit.rootIn == newAddress(0,0)) {
+            //get all fee from token in
+            amountInWithFee = (msg.amount * (self.fee * 2)) / 1000;
+        } else if(swapInit.rootOut != newAddress(0,0)){
+            amountInWithFee = (msg.amount * self.fee) / 1000;
+        }
 
         //do swap
         let amountOut: Int = (swapInit.reserveOut * amountInWithFee) / (swapInit.reserveIn + amountInWithFee);
 
         let amountOutWithFee: Int = amountOut;
 
+        if (swapInit.rootOut == newAddress(0,0)) {
+            //get all fee from token Out
+            amountOutWithFee = (amountOut * (self.fee * 2)) / 1000;
+
+        } else if(swapInit.rootIn != newAddress(0,0)) {
+            amountOutWithFee = (amountOut * self.fee) / 1000;
+        }
+    
+
         if (amountOutWithFee < msg.minimum) {
             //return swapped tokens if not upto minimum
             self.reply(SwapCallBack{inFee: 0, outFee: 0, ref: msg.ref, reserve0: self.reserve0, reserve1: self.reserve1, token0: self.token0, token1: self.token1, path: msg.path, hops: 0, length: 0, pair: newAddress(0,0), priceChanged: true, receiver: msg.receiver, walletOutAddress: swapInit.walletOut, walletInAddress: swapInit.walletIn, tokenOutAddress: swapInit.rootOut, tokenInAddress: swapInit.rootIn, amountIn: msg.amount, amountOut: 0}.toCell());
-        } else {
+        } 
+        
+        else {
 
-            let inFee: Int = 0; // 0
-            let outFee: Int = 0; // 0
+
+            //CALCULATE LEFT OVER FEE
+            //send fee out
+            // let splitA: Int = (((msg.amount - amountInWithFee) * pow(10, 18)) * 60) / 100;
+            // let splitB: Int = (((amountOut - amountOutWithFee) * pow(10, 18)) * 60) / 100;
+
+            let inFee: Int = msg.amount - amountInWithFee; // 0 if all fees were deducted from amountOutWithFee
+            let outFee: Int = amountOut - amountOutWithFee; // 0 if all fees were deducted from amountInWithFee
 
             //update reserve
-            if (msg.tokenRoot == self.token0) {
+            if (self.reserve0 == swapInit.reserveIn) {
                 self.reserve0 = self.reserve0 + (msg.amount - inFee);
                 self.reserve1 = self.reserve1 - amountOut;
             } else {
@@ -222,7 +243,7 @@ contract Pair with Jetton {
     }
     
     //lp removal entry
-    receive (msg: TokenBurnNotification) {
+    receive(msg: TokenBurnNotification) {
         self.requireSenderAsWalletOwner(msg.response_destination!!);       // Check wallet
         self.removeLiquidity(msg.amount, msg.sender);
     }
@@ -335,10 +356,25 @@ contract Pair with Jetton {
 
         let amountInWithFee: Int = amountIn;
 
+        if (tokenIn == newAddress(0,0)) {
+            //get all fee from token in
+            amountInWithFee = (amountIn * (self.fee * 2)) / 1000;
+        } else if(tokenOut != newAddress(0,0)){
+            amountInWithFee = (amountIn * self.fee) / 1000;
+        }
+
         //do swap
         let amountOut: Int = (reserveOut * amountInWithFee) / (reserveIn + amountInWithFee);
 
         let amountOutWithFee: Int = amountOut;
+
+        if (tokenOut == newAddress(0,0)) {
+            //get all fee from token Out
+            amountOutWithFee = (amountOut * (self.fee * 2)) / 1000;
+
+        } else if(tokenIn != newAddress(0,0)) {
+            amountOutWithFee = (amountOut * self.fee) / 1000;
+        }
 
         return amountOutWithFee;
     }
@@ -413,7 +449,7 @@ contract PairChild {
     receive(msg: PairChildInit){
         require(self._initialized == false, "Already Initialized");
         self._initialized = true;
-        self.jettonFee = ton("0.15");
+        self.jettonFee = msg.jettonFee;
 
         if(msg.token0 != newAddress(0,0)){
             self.token0Wallet = msg.token0Wallet;

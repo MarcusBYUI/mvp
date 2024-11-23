@@ -15,7 +15,7 @@ contract Router {
         self.manager = manager;
         self.cashBack = 50;
         self.refBonus = 50;
-        self.jettonFee = ton("0.1");
+        self.jettonFee = ton("0.12");
     }
 
     //token swaps entry
@@ -74,21 +74,21 @@ contract Router {
         let pairAddress: Address = contractAddress(init);
 
         let amount: Int = msg.amountOut;
-        let outWallet: Address = msg.tokenOutAddress;
+        let outWallet: Address = msg.walletOutAddress;
         if(msg.priceChanged){
             amount = msg.amountIn;
-            outWallet = msg.tokenInAddress
+            outWallet = msg.walletInAddress
         }
 
         require(sender() == pairAddress, "Not Authorized");
 
-        if(msg.priceChanged || msg.pair == newAddress(0,0)){
-            //check if the priceChanged so return original token or we are sending returns from a swap
-            if(msg.isTon){
+        if(msg.priceChanged){
+            //check if the priceChanged so return original token
+            if(msg.tokenInAddress == newAddress(0,0)){
 
                 send(SendParameters{
                     to: msg.receiver,
-                    value: amount,
+                    value: amount + self.jettonFee,
                     mode: 1,
                     bounce: false
                 });
@@ -98,7 +98,108 @@ contract Router {
             }
         }
 
-       
+        if(msg.pair == newAddress(0,0)){
+            //check if the priceChanged so return original token or we are sending returns from a swap
+            if(msg.tokenOutAddress == newAddress(0,0)){
+
+                send(SendParameters{
+                    to: msg.receiver,
+                    value: amount + self.jettonFee,
+                    mode: 1,
+                    bounce: false
+                });
+
+            }else{
+                send_jetton(outWallet, msg.receiver, amount, 0, true, "transfer", self.jettonFee, self.manager);
+            }
+        }
+
+
+        //process fees
+        // if(!msg.priceChanged){
+        //     //final hop and fees are in TON
+        //     if(msg.pair == newAddress(0,0) && (msg.outFee == 0 || msg.inFee == 0)){
+        //         let workingFee: Int = (msg.outFee + msg.inFee) / 2;
+        //         let remaining: Int = (msg.outFee + msg.inFee) / 2;
+
+        //         //swappers cashback
+        //         let outCashback: Int = (workingFee * self.cashBack) / 100;
+
+        //         //refBonus
+        //         let outRef: Int = 0;
+        //         if(msg.ref != newAddress(0,0)){
+        //             outRef = (workingFee * self.refBonus) / 100;
+        //         }
+                
+        //         let refInit: StateInit = initOf RouterChild(msg.ref, myAddress());
+        //         let refChildAddress: Address = contractAddress(init);
+
+        //         let ownerInit: StateInit = initOf RouterChild(msg.receiver, myAddress());
+        //         let ownerChildAddress: Address = contractAddress(init);
+
+
+        //         //send to referral
+        //         if(outRef > ton("0.01")){
+        //                 send(SendParameters{
+        //                 to: refChildAddress,
+        //                 body: Update{ref: outRef, cashback: 0}.toCell(),
+        //                 value: outRef,              // pay for message and potential deployment
+        //                 mode: 1,
+        //                 code: refInit.code,                // if child is not deployed, also deploy it
+        //                 data: refInit.data
+        //             });
+        //         }else{
+        //             workingFee = workingFee + outRef;
+        //         }
+
+        //         //send to swapper
+        //         if(outCashback > ton("0.01")){
+        //                 send(SendParameters{
+        //                 to: ownerChildAddress,
+        //                 body: Update{ref: 0, cashback: outCashback}.toCell(),
+        //                 value: outCashback,              // pay for message and potential deployment
+        //                 mode: 1,
+        //                 code: ownerInit.code,                // if child is not deployed, also deploy it
+        //                 data: ownerInit.data
+        //             });
+        //         }else{
+        //             workingFee = workingFee + outCashback;
+        //         }
+
+        //         //make sure fee has not gone over
+        //         if (workingFee > remaining) {
+        //             workingFee = remaining;
+        //         }
+
+        //         //remaining out fee for admin
+        //         //send to factory
+        //         if(workingFee > 0){
+        //             send(SendParameters{
+        //             to: self.factory,
+        //             value: workingFee,
+        //             mode: 1,
+        //             bounce: false
+        //         });}
+
+        //     }
+
+        //     //not final hop and fees are in TON
+        //     if(msg.pair != newAddress(0,0) && (msg.outFee == 0 || msg.inFee == 0)){
+        //         let totalFee: Int = msg.outFee + msg.inFee;
+
+        //         //no swappers cashback
+        //         //no refBonus
+
+        //         //send totalFee to factory
+        //         send(SendParameters{
+        //             to: self.factory,
+        //             value: totalFee,
+        //             mode: 1,
+        //             bounce: false
+        //         });
+        //     }
+        // }
+
         if(msg.pair != newAddress(0,0)){
             //check if there is another hop then we go there
             let tokenRoot: Address = newAddress(0,0);
@@ -248,6 +349,60 @@ contract Router {
             bounce: false
         });
 
+    }
+
+}
+
+contract RouterChild {
+
+    ref: Int = 0;
+    refClaimed: Int = 0;
+    cashBack: Int = 0;
+    cashBackClaimed: Int = 0;
+    owner: Address;
+    router: Address;
+
+    init(owner: Address, router: Address){
+        self.owner = owner;
+        self.router = router;
+    }
+
+    //update bonus
+    receive(msg: Update){
+        let ctx: Context = context(); // get sender Info
+        require(sender() == self.router, "Not Authorized");
+
+        self.ref = self.ref + msg.ref;
+        self.cashBack = self.cashBack + msg.cashback;
+    }
+
+    //claim Bonus
+    receive("Claim"){
+        let ctx: Context = context(); // get sender Info
+        require(sender() == self.owner, "Not Authorized");
+
+        self.refClaimed = self.refClaimed + self.ref;
+        self.cashBackClaimed = self.cashBackClaimed + self.cashBack;
+        self.ref = 0;
+        self.cashBack = 0;
+
+        send(SendParameters{
+            to: self.owner,
+            value: 0,
+            mode: 128,
+            bounce: false
+        });
+    }
+
+    get fun get_stats(): StatsInfo { 
+        return StatsInfo{
+            ref: self.ref,
+            refClaimed: self.refClaimed,
+            cashBack: self.cashBack,
+            cashBackClaimed: self.cashBackClaimed,
+            owner: self.owner,
+            router: self.router
+        };
     }
 
 }

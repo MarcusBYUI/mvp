@@ -10,8 +10,8 @@ contract Factory {
 
     init (manager: Address){
         self.manager = manager;
-        self.jettonFee = ton("0.09");
-        self.created = 654859818946057;
+        self.jettonFee = ton("0.12");
+        self.created = 000084518946057;
     }
 
     fun _getSendValue (value: Int) : Int {
@@ -54,7 +54,7 @@ contract Factory {
                                     token0Wallet: msg.token0Wallet,
                                     token1Wallet: msg.token1Wallet
                                     }.toCell(),
-                    value: ton("0.1"),              // pay for message and potential deployment
+                    value: ton("0.08"),              // pay for message and potential deployment
                     mode: 1,
                     code: init.code,                // if child is not deployed, also deploy it
                     data: init.data
@@ -76,7 +76,7 @@ contract Factory {
         self.jettonFee = msg.jettonFee;
     }
 
-        receive(msg: RemoveToken){
+    receive(msg: RemoveToken){
         let ctx: Context = context(); // get sender Info
         require(ctx.sender == self.manager, "Not Owner");
         
@@ -95,6 +95,13 @@ contract Factory {
             bounce: false
         });
 
+    }
+
+    //forward all received tokens to router
+    receive(msg: TokenNotification){
+        let ctx: Context = context(); // get sender Info
+        let router: Address = msg.forward_payload.loadAddress();
+        send_jetton(sender(), router, msg.amount, 0, false, "transfer", self.jettonFee / 2, self.manager);
     }
 
     //get pair
@@ -120,4 +127,4 @@ contract Factory {
 
 }
 
-//add other helpers
+//add other helpers for tokens, lenght of pairs and list of pairs

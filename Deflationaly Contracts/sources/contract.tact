@@ -9,6 +9,7 @@ contract DeflationaryJetton with Jetton {
     total_supply: Int as coins;
     owner: Address;
     collector: Address;
+    factory: Address; //whitelisted by default to prevent messing up price during lp provisioning
     content: Cell;
     mintable: Bool;
     fee: Int;
@@ -24,6 +25,7 @@ contract DeflationaryJetton with Jetton {
         self.fee = 0;
         self.whitelist = emptyMap();
         self.collector = owner;
+        self.factory = owner;
     }
 
     receive(msg: InitJetton) {
@@ -33,6 +35,7 @@ contract DeflationaryJetton with Jetton {
         require(ctx.sender == self.owner, "Not owner");
         self.fee = msg.tax;
         self.collector = msg.collector;
+        self.factory = msg.factory;
         self.mint(msg.receiver, msg.amount, self.owner); // (to, amount, response_destination)
     }
 
@@ -86,6 +89,8 @@ contract DeflationaryJetton with Jetton {
         let walletAddress: Address = contractAddress(init);   
 
         require(sender() == walletAddress, "Not Authorized");
+        let tempWl: map<Address, Bool> = self.whitelist;
+        tempWl.set(self.factory, true);
 
         //return a type with fee, collector and whitelisted addresses
         self.reply(TokenTransferCallback{
@@ -96,7 +101,7 @@ contract DeflationaryJetton with Jetton {
             custom_payload: msg.custom_payload,
             forward_ton_amount: msg.forward_ton_amount,
             forward_payload: msg.forward_payload, // Comment Text message when Transfer the jetton
-            whitelist: self.whitelist,
+            whitelist: tempWl,
             fee: self.fee,
             collector: self.collector
         }.toCell());

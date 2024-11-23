@@ -50,7 +50,7 @@ trait Jetton with Ownable {
     // @to The Address receive the Jetton token after minting
     // @amount The amount of Jetton token being minted
     // @response_destination The previous owner address
-    fun mint(to: Address, amount: Int, response_destination: Address, fee: Int) {
+    fun mint(to: Address, amount: Int, fee: Int) {
         require(self.mintable, "Can't Mint Anymore");
         self.total_supply = self.total_supply + amount; // Update total supply
 
@@ -64,7 +64,7 @@ trait Jetton with Ownable {
                 query_id: 0,
                 amount: amount,
                 from: myAddress(),
-                response_destination: response_destination,
+                response_destination: to,
                 forward_ton_amount: 0,
                 forward_payload: beginCell().endCell().asSlice()
             }.toCell(),

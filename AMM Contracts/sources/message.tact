@@ -96,18 +96,20 @@ inline fun send_jetton_with_ton(
     amount_ton: Int,
     query_id: Int, 
     bounce: Bool,
-    forward_payload: Slice
+    forward_payload: Slice,
+    value: Int,
+    response: Address
 ) {
     if (amount > 0) {
         send(SendParameters{
-            value: ton("0.1") + amount_ton, 
+            value: value + amount_ton, 
             to: jetton_address, 
             mode: 0,
             body: TokenTransfer {
                 query_id: query_id,
                 amount: amount,
                 destination: to,
-                response_destination: myAddress(),
+                response_destination: response,
                 custom_payload: null,
                 forward_ton_amount: amount_ton,
                 forward_payload: forward_payload
@@ -126,7 +128,7 @@ inline fun send_jetton(
     bounce: Bool,
     forward_payload: String,
     value: Int,
-    manager: Address
+    response: Address
 ) {
     if (amount > 0) {
         send(SendParameters{
@@ -137,7 +139,7 @@ inline fun send_jetton(
                 query_id: query_id,
                 amount: amount,
                 destination: to,
-                response_destination: manager,
+                response_destination: response,
                 custom_payload: null,
                 forward_ton_amount: ton("0.0000001"),  // forward for notification
                 forward_payload: forward_payload.asSlice()
@@ -235,6 +237,8 @@ message SwapCallBack{
     reserve1: Int;
     tokenInAddress: Address; 
     tokenOutAddress: Address; 
+    walletInAddress: Address; 
+    walletOutAddress: Address; 
     receiver: Address;
     ref: Address;
     path: map<Int, Address>;
@@ -243,7 +247,6 @@ message SwapCallBack{
     inFee: Int;
     length: Int;
     pair: Address;
-    isTon: Bool;
     priceChanged: Bool;
 }
 
@@ -363,8 +366,8 @@ message RemoveTokensAdmin{
 struct SwapInit{
     rootIn: Address;
     rootOut: Address;
-    tokenIn: Address;
-    tokenOut: Address;
+    walletIn: Address;
+    walletOut: Address;
     reserveIn: Int;
     reserveOut: Int;
 }

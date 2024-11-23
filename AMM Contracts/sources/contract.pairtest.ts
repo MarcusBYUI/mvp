@@ -1,5 +1,5 @@
 // ================================================================= //
-import { Router } from "./output/Impulse-Finance_Router";
+import { PairChildTest } from "./output/Impulse-Finance_PairChildTest";
 // ================================================================ //
 import { beginCell, Address, contractAddress, toNano, fromNano } from "@ton/core";
 import { TonClient, WalletContractV4, internal } from "@ton/ton";
@@ -29,10 +29,8 @@ import { buildOnchainMetadata } from './utils/jetton-helpers';
     console.log("Wallet address: ", wallet_contract.address);
 
     // Replace owner with your address
-    let owner = Address.parse("0QCCvFOpKe6jIVq9s2QWsf7tD8lqs5KSH_jbBYHfBqZKUvcm");
-    let factory = Address.parse("EQAuHR1o7enGl8KXCWPtAWPEmKLlMauFS6_wSSNFxYk-0OCg")
-
-    let init = await Router.init(owner, factory);
+    // Prepare the initial code and data for the contract
+    let init = await PairChildTest.init();
 
     let deployContract = contractAddress(0, init);
     // ========================================

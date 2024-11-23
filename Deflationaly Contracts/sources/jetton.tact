@@ -182,14 +182,12 @@ contract JettonDefaultWallet {
                     from: self.owner,
                     response_destination: msg.response_destination,
                     forward_ton_amount: msg.forward_ton_amount,
-                    forward_payload: beginCell().storeRef(beginCell().storeCoins(0).storeAddress(myAddress()).endCell()).storeRef(emptySlice().asCell()).asSlice()
+                    forward_payload: beginCell().storeRef(beginCell().storeCoins(0).storeAddress(myAddress()).endCell()).storeRef(msg.forward_payload.asCell()).asSlice()
                 }.toCell(),
                 code: init.code,
                 data: init.data
             });
-        }  
-
-        
+        }       
         
     }
 
