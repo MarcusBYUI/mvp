@@ -1,6 +1,6 @@
 import axios from "axios";
-//export const BASEURL = "https://api.impulsefinance.org/";
-export const BASEURL = "http://192.168.1.41:3001/";
+export const BASEURL = "https://whale-app-yf9gj.ondigitalocean.app/";
+//export const BASEURL = "http://192.168.1.41:3001/";
 
 export default async function apiRequest(
     path,
